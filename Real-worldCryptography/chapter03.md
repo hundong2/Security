@@ -83,4 +83,29 @@ func main() {
 
 # HMAC based key derivation funcction ( HKDF )
 
-- [PRF-의사 난수 함수](./PRF.md). 
+- [PRF-의사 난수 함수](./PRF.md). - pseudorandom function 
+ 	
+
+# SipHash
+
+- 짧은 인증 태그에 최적화 된 MAC
+- [SipHash](./SipHash.md). 
+
+## HMAC 
+
+- 해시기반 맥 
+- RFC2104, ANSI X9.71
+- 입력 키(k)로부터 k1, k2가 파생됨.
+
+### 순서
+
+1. 먼저 기본키에서 두개의 키를 생성
+- $$ k1 = k\oplus ipad $$
+- $$ k2 = k\oplus opad $$ 
+- ipad(내부 패딩), opad(외부패딩)은 상수
+
+2. 키 k1을 메시지와 연결하고 해시 
+3. 2의 결과를 키 k2에 연결하고 한번더 해시 
+4. 최종 인증 태그를 생성 
+
+- [길이 확장 공격(Length Extension Attack)](./LengthExtensionAttack.md). 
