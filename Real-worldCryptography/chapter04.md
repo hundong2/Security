@@ -80,7 +80,7 @@ flowchart LR
 ### ChaCha20-Poly1305
 
 - ChaCha20 stream 암호와 Poly1350 MAC이라는 두가지 알고리즘의 조합이다. 
-- 
+- 하드웨어 자원을 사용할 수 없을때의 AES와 달리 소프ㅡ웨어에서 사용할 때 빠른 속도를 위해 설계 됨. 
 
 # 용어 
 
@@ -90,3 +90,4 @@ flowchart LR
 - `ECB` : electronic codebook.  
   - 전자 코드북, padding 을 채울때 원문의 크기를 그대로 패딩으로 채움 
   - `GMAC` : `GHASH`로 구성된 MAC,
+- `Nonce`: [Nonce Reference](./Nonce.md).  
