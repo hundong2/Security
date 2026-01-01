@@ -19,6 +19,44 @@
 
 # AES-CBC-HMAC
 
+### Diagram: Encrypt-then-MAC (FKS)
+
+```mermaid
+flowchart LR
+  P[Plaintext] --> Pad[PKCS#7 Padding]
+  Pad -->|AES-CBC (K_enc, IV)| C[Ciphertext]
+
+  AAD[AAD] -- concat --> H[HMAC-SHA-256 (K_mac)]
+  IV[IV (16B)] -- concat --> H
+  C -- concat --> H
+  H --> T[Tag]
+
+  subgraph Output
+    AAD
+    IV
+    C
+    T
+  end
+```
+
+### Diagram: Verify-then-Decrypt
+
+```mermaid
+flowchart LR
+  AAD --> H2[HMAC-SHA-256 (K_mac)]
+  IV --> H2
+  C[Ciphertext] --> H2
+  H2 --> Compare{Constant-time compare}
+  T[Tag] --> Compare
+  Compare -- OK --> Dec[AES-CBC Decrypt (K_enc, IV)] --> Unpad[Remove PKCS#7] --> P2[Plaintext]
+  Compare -- FAIL --> Drop[Reject]
+```
+
+> Notes
+> - IV(16B)는 키당 메시지마다 고유해야 하며 재사용 금지.
+> - 태그 검증을 반드시 복호화 전에 수행(패딩 오라클 방지).
+> - 태그 비교는 상수시간 비교로 처리.
+
 # 올인원 구조 인증 
 
 ## AEAD 
@@ -31,3 +69,24 @@
 - 갈루아/카운터 모드(Galois/Counter Mode)가 있는 AES
 - AES 에 대한 하드웨어 자원을 활용하여, 고성능을 위해 이를 효율적으로 구현할 수 있는 MAC(GMAC)을 사용하여 설계됨. 
 - [AES-GCM](./AES_GCM.md). 
+
+## AES CBC
+
+### AES CBC HMAC
+
+- CBC에서 공격자는 여전히 암호문과 IV를 수정할 수 있다.  실제로 이를 방지하는 무결성 메커니즘은 없다.  
+- 일반적인 구조 
+
+### ChaCha20-Poly1305
+
+- ChaCha20 stream 암호와 Poly1350 MAC이라는 두가지 알고리즘의 조합이다. 
+- 
+
+# 용어 
+
+- `CBC` : ciper block chaining. 
+- `IV` :  Initialize vector. 
+  - CBC작동 모드에서 고유해야(반복할 수 없음), 예측할 수 없는 값. 
+- `ECB` : electronic codebook.  
+  - 전자 코드북, padding 을 채울때 원문의 크기를 그대로 패딩으로 채움 
+  - `GMAC` : `GHASH`로 구성된 MAC,
