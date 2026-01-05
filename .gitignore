@@ -1,1 +1,16 @@
 *.key
+
+# CMake / build artifacts
+build/
+cmake-build-*/
+CMakeCache.txt
+CMakeFiles/
+CTestTestfile.cmake
+CTestTestfile.cmake
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+_deps/
+CMakeUserPresets.json
+CMakeLists.txt.user
